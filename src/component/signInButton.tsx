@@ -26,7 +26,7 @@ type SignInButtonProps = {
 
   const handleSignIn = () => {
     const callbackUrl = `${window.location.origin}${window.location.pathname}`; // same page
-    const authUrl = new URL(`http://localhost:3000/api/providers/${provider}`);
+    const authUrl = new URL(`https://authiq.vercel.app/api/providers/${provider}`);
     authUrl.searchParams.set("websiteId", websiteId);
     authUrl.searchParams.set("redirectUrl", callbackUrl);
     window.location.href = authUrl.toString();
