@@ -1,0 +1,33 @@
+{
+  "name": "authiq",
+  "version": "1.0.9",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npx rollup -c",
+    "dev": "rollup -c --watch"
+  },
+  "keywords": [],
+  "author": "Ayush Saini",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/react": "^19.2.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "rollup": "^4.53.2",
+    "tslib": "^2.8.1"
+  },
+  "dependencies": {
+    "jwt-decode": "^4.0.0"
+  }
+}
