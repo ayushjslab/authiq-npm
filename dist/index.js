@@ -39,6 +39,51 @@ const useValidateUser = () => {
     return { data, loading, error };
 };
 
+const useFetchWebsiteUsers = (websiteId) => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        if (!websiteId) {
+            setError("Website ID is required");
+            setLoading(false);
+            return;
+        }
+        const fetchUsers = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const token = document.cookie
+                    .split("; ")
+                    .find((row) => row.startsWith("authiq_token="))
+                    ?.split("=")[1];
+                if (!token)
+                    throw new Error("No auth token found");
+                const res = await fetch(`https://authiq.vercel.app/api/external/fetch-all-users?websiteId=${websiteId}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (!res.ok) {
+                    throw new Error(`Request failed: ${res.status}`);
+                }
+                const json = await res.json();
+                setUsers(json.data || []);
+            }
+            catch (err) {
+                setError(err.message);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
+        fetchUsers();
+    }, [websiteId]);
+    return { users, loading, error };
+};
+
 const SignInButton = ({ provider, websiteId, redirectUrl = "/", label, }) => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -144,5 +189,5 @@ const UserButton = () => {
                 React.createElement(SignOutButton, null))))));
 };
 
-export { SignInButton, SignOutButton, UserButton, useValidateUser };
+export { SignInButton, SignOutButton, UserButton, useFetchWebsiteUsers, useValidateUser };
 //# sourceMappingURL=index.js.map
