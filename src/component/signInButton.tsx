@@ -18,7 +18,7 @@ type SignInButtonProps = {
     const token = params.get("token");
 
     if (token) {
-      document.cookie = `authiq_token=${token}; path=/; Secure; SameSite=Lax`;
+      document.cookie = `authiq_token=${token}; path=/; SameSite=Lax`;
 
       window.location.href = redirectUrl;
     }

@@ -8,11 +8,21 @@ export const useValidateUser = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("authiq_token="))
+          ?.split("=")[1];
+        
+        if (!token) throw new Error("No auth token found");
+        
         const res = await fetch(
           "https://authiq.vercel.app/api/external/validate-user",
           {
             method: "GET",
-            credentials: "include",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
 

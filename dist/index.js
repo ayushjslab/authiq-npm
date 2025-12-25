@@ -8,9 +8,18 @@ const useValidateUser = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const token = document.cookie
+                    .split("; ")
+                    .find((row) => row.startsWith("authiq_token="))
+                    ?.split("=")[1];
+                if (!token)
+                    throw new Error("No auth token found");
                 const res = await fetch("https://authiq.vercel.app/api/external/validate-user", {
                     method: "GET",
-                    credentials: "include",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 });
                 if (!res.ok) {
                     throw new Error(`Request failed: ${res.status}`);
@@ -35,7 +44,7 @@ const SignInButton = ({ provider, websiteId, redirectUrl = "/", label, }) => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
         if (token) {
-            document.cookie = `authiq_token=${token}; path=/; Secure; SameSite=Lax`;
+            document.cookie = `authiq_token=${token}; path=/; SameSite=Lax`;
             window.location.href = redirectUrl;
         }
     }, [redirectUrl]);
@@ -64,9 +73,18 @@ const UserButton = () => {
     React.useEffect(() => {
         const fetchUser = async () => {
             try {
+                const token = document.cookie
+                    .split("; ")
+                    .find((row) => row.startsWith("authiq_token="))
+                    ?.split("=")[1];
+                if (!token)
+                    throw new Error("No auth token found");
                 const res = await fetch("https://authiq.vercel.app/api/external/validate-user", {
                     method: "GET",
-                    credentials: "include",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 });
                 if (!res.ok)
                     return;
